@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  server-demo-app:
+    build: ./server/
+    environment:
+      - PORT=5555
+    ports:
+    - 5555:5555
+    networks:
+      server_net:
+        ipv4_address: "172.32.0.3"
+
+  wg-server:
+    image: ghcr.io/linuxserver/wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Bratislava
+      - SERVERURL=wireguard.domain.com
+      - SERVERPORT=51820
+      - PEERS=client1,client2
+      - PEERDNS=auto
+      - INTERNAL_SUBNET=10.13.13.0/24
+      - ALLOWEDIPS=10.13.13.0/24,172.32.0.0/24
+    volumes:
+      - ./wg-server-config:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+    networks:
+      server_net:
+        ipv4_address: "172.32.0.2"
+
+networks:
+  server_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.32.0.0/24"
