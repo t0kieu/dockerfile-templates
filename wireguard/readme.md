@@ -1,3 +1,6 @@
+# Setup instructions
+
+0. Edit `SERVERURL` environment variable in `docker-compose-server.yml` file.
 1. Build & Run server app stack
 ```bash
 docker-compose -f docker-compose-server.yml build
