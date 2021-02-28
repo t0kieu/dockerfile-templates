@@ -24,6 +24,7 @@ services:
       - SERVERPORT=51820
       - PEERS=client1,client2
       - PEERDNS=auto
+      # - PEERDNS=10.13.13.13.1,8.8.8.8 alternative
       - INTERNAL_SUBNET=10.13.13.0/24
       - ALLOWEDIPS=10.13.13.0/24,172.32.0.0/24
     volumes:
